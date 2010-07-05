@@ -5,4 +5,6 @@ To do:
 1. Allow user to leave fields blank
 2. Show live preview to show HTML as you type it
 3. Process user input and remove variables if fields are blank
+4. Declare dependancy on search module
+
 

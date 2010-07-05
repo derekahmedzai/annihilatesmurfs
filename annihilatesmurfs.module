@@ -5,6 +5,11 @@
  * @file
  * Annihilate smurfs module - replaces the "blue smurf" text with whatever you like.
  */
+ 
+// constants
+define('ANNIHILATE_TERM_1', 'blue');
+define('ANNIHILATE_TERM_2', 'smurf');
+
 
 /**
  * Display help and module information
@@ -44,15 +49,19 @@ function annihilatesmurfs_perm() {
 function phptemplate_box($title, $content, $region = 'main') {
   if ($title == 'Your search yielded no results') {
     // get replacement text (if any)
-    $term1 = variable_get('annihilatesmurfs_term1', 'blue');
-    $term2 = variable_get('annihilatesmurfs_term2', 'smurf');
+    $term1 = variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1);
+    $term2 = variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2);
   
-    // return HTML
+    /*// return HTML
     $content = '<ul>';
     $content .= '<li>Check if your spelling is correct.</li>';
     $content .= '<li>Remove quotes around phrases to match each word individually: <em>"'. $term1 .' '. $term2 .'"</em> will match less than <em>'. $term1 .' '. $term2 .'</em>.</li>';
     $content .= '<li>Consider loosening your query with <em>OR</em>: <em>'. $term1 .' '. $term2 .'</em> will match less than <em>'. $term1 .' OR '. $term2 .'</em>.</li>';
-    $content .= '</ul>';
+    $content .= '</ul>';*/
+	
+	// to preserve translatability, need to just replace the search terms
+	$content = preg_replace('/'. ANNIHILATE_TERM_1 .'/', $term1, $content);
+	$content = preg_replace('/'. ANNIHILATE_TERM_2 .'/', $term2, $content);
   }
   $output = '<h2 class="title">'. $title .'</h2><div>'. $content .'</div>';
   return $output;
@@ -65,31 +74,31 @@ function phptemplate_box($title, $content, $region = 'main') {
 function annihilatesmurfs_admin() {
 
   $form['annihilatesmurfs_intro'] = array(
-    '#value' => t('Replace the "blue smurf" text with whatever you like.<br />'. l('Get help on the Annihilate smurfs module here', 'admin/help/annihilatesmurfs')),
+    '#value' => t('Replace the "'. ANNIHILATE_TERM_1 .' '. ANNIHILATE_TERM_2 .'" text with whatever you like.<br />'. l('Get help on the Annihilate smurfs module here', 'admin/help/annihilatesmurfs')),
     // TODO - allow user to leave fields blank
     //<br />Leave the fields blank to use the default text ("blue smurf").
   );
   $form['annihilatesmurfs_term1'] = array(
     '#type' => 'textfield',
     '#title' => t('First term'),
-    '#default_value' => variable_get('annihilatesmurfs_term1', 'blue'),
+    '#default_value' => variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1),
     '#size' => 20,
     '#maxlength' => 50,
-    '#description' => t("The first example search term (default value: \"blue\")."),
+    '#description' => t('The first example search term (default value: "'. ANNIHILATE_TERM_1 .'").'),
     '#required' => FALSE,
   );
   $form['annihilatesmurfs_term2'] = array(
     '#type' => 'textfield',
     '#title' => t('Second term'),
-    '#default_value' => variable_get('annihilatesmurfs_term2', 'smurf'),
+    '#default_value' => variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2),
     '#size' => 20,
     '#maxlength' => 50,
-    '#description' => t("The second example search term (default value: \"smurf\")."),
+    '#description' => t('The second example search term (default value: "'. ANNIHILATE_TERM_2 .'").'),
     '#required' => FALSE,
   );
   // add live preview placeholder - see annihilatesmurfs.js for functionality
   $form['annihilatesmurfs_live_preview'] = array(
-    '#value' => '<div id="annihilatesmurfs-live-preview"><h3>Preview</h3><div style="border:1px solid #ccc; padding:5px; margin:5px 0;"><strong>Your search yielded no results</strong><ul><li>Check if your spelling is correct.</li><li>Remove quotes around phrases to match each word individually: <em>&ldquo;<span class="term1">'. variable_get('annihilatesmurfs_term1', 'blue') .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', 'smurf') .'</span>&rdquo;</em> will match less than <em><span class="term1">'. variable_get('annihilatesmurfs_term1', 'blue') .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', 'smurf') .'</span></em>.</li><li>Consider loosening your query with <em>OR</em>: <em><span class="term1">'. variable_get('annihilatesmurfs_term1', 'blue') .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', 'smurf') .'</span></em> will match less than <em><span class="term1">'. variable_get('annihilatesmurfs_term1', 'blue') .'</span> OR <span class="term2">'. variable_get('annihilatesmurfs_term2', 'smurf') .'</span></em>.</li></ul></div></div>',
+    '#value' => '<div id="annihilatesmurfs-live-preview"><h3>Preview</h3><div style="border:1px solid #ccc; padding:5px; margin:5px 0;"><strong>Your search yielded no results</strong><ul><li>Check if your spelling is correct.</li><li>Remove quotes around phrases to match each word individually: <em>&ldquo;<span class="term1">'. variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1) .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2) .'</span>&rdquo;</em> will match less than <em><span class="term1">'. variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1) .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2) .'</span></em>.</li><li>Consider loosening your query with <em>OR</em>: <em><span class="term1">'. variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1) .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2) .'</span></em> will match less than <em><span class="term1">'. variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1) .'</span> OR <span class="term2">'. variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2) .'</span></em>.</li></ul></div></div>',
   );
   
   // include live preview script to show HTML as you type it
