@@ -1,0 +1,6 @@
+; $Id$
+name = Annihilate smurfs
+description = Replaces the "blue smurf" text with whatever you like.
+core = 6.x
+package = Search
+version = 6.x-1.1

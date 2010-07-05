@@ -1,0 +1,27 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Annihilate smurfs module's install and update code
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function annihilatesmurfs_install() {
+  drupal_set_message(t("Annihilate smurfs settings are available under !link", 
+    array( '!link' => l('Administer > Site configuration > Annihilate smurfs ',  'admin/settings/annihilatesmurfs' ) )
+  ));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function annihilatesmurfs_uninstall() {
+  // remove persistent variables
+  variable_del('annihilatesmurfs_term1');
+  variable_del('annihilatesmurfs_term2');
+  
+  drupal_set_message(t("Annihilate smurfs module has been uninstalled."));
+}

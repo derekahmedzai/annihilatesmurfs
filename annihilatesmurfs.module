@@ -1,0 +1,136 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Annihilate smurfs module - replaces the "blue smurf" text with whatever you like.
+ */
+
+/**
+ * Display help and module information
+ * @param path which path of the site we're displaying help
+ * @param arg array that holds the current path as would be returned from arg() function
+ * @return help text for the path
+ */
+function annihilatesmurfs_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case "admin/help#annihilatesmurfs":
+      //$output = '<p>'.  t("Replaces the \"blue smurf\" text with whatever you like.") .'</p>';
+      $output = check_markup(file_get_contents( dirname(__FILE__) ."/README.txt") );
+      break;
+  }
+  return $output;
+} // function annihilatesmurfs_help
+
+
+
+/**
+ * Valid permissions for this module
+ * @return array An array of valid permissions for the annihilatesmurfs module
+ */
+function annihilatesmurfs_perm() {
+  return array('administer annihilatesmurfs');
+} // function annihilatesmurfs_perm()
+
+
+
+/**
+ * Rewrite the search results box
+ *
+ * Override theme_box and rewrite the example search terms
+ * @ingroup themeable
+ */
+function phptemplate_box($title, $content, $region = 'main') {
+  if ($title == 'Your search yielded no results') {
+    // get replacement text (if any)
+    $term1 = variable_get('annihilatesmurfs_term1', 'blue');
+    $term2 = variable_get('annihilatesmurfs_term2', 'smurf');
+  
+    // return HTML
+    $content = '<ul>';
+    $content .= '<li>Check if your spelling is correct.</li>';
+    $content .= '<li>Remove quotes around phrases to match each word individually: <em>"'. $term1 .' '. $term2 .'"</em> will match less than <em>'. $term1 .' '. $term2 .'</em>.</li>';
+    $content .= '<li>Consider loosening your query with <em>OR</em>: <em>'. $term1 .' '. $term2 .'</em> will match less than <em>'. $term1 .' OR '. $term2 .'</em>.</li>';
+    $content .= '</ul>';
+  }
+  $output = '<h2 class="title">'. $title .'</h2><div>'. $content .'</div>';
+  return $output;
+} // function phptemplate_box
+
+
+/**
+ * Implement administration form
+ */
+function annihilatesmurfs_admin() {
+
+  $form['annihilatesmurfs_intro'] = array(
+    '#value' => t('Replace the "blue smurf" text with whatever you like.<br />'. l('Get help on the Annihilate smurfs module here', 'admin/help/annihilatesmurfs')),
+    // TODO - allow user to leave fields blank
+    //<br />Leave the fields blank to use the default text ("blue smurf").
+  );
+  $form['annihilatesmurfs_term1'] = array(
+    '#type' => 'textfield',
+    '#title' => t('First term'),
+    '#default_value' => variable_get('annihilatesmurfs_term1', 'blue'),
+    '#size' => 20,
+    '#maxlength' => 50,
+    '#description' => t("The first example search term (default value: \"blue\")."),
+    '#required' => FALSE,
+  );
+  $form['annihilatesmurfs_term2'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Second term'),
+    '#default_value' => variable_get('annihilatesmurfs_term2', 'smurf'),
+    '#size' => 20,
+    '#maxlength' => 50,
+    '#description' => t("The second example search term (default value: \"smurf\")."),
+    '#required' => FALSE,
+  );
+  // add live preview placeholder - see annihilatesmurfs.js for functionality
+  $form['annihilatesmurfs_live_preview'] = array(
+    '#value' => '<div id="annihilatesmurfs-live-preview"><h3>Preview</h3><div style="border:1px solid #ccc; padding:5px; margin:5px 0;"><strong>Your search yielded no results</strong><ul><li>Check if your spelling is correct.</li><li>Remove quotes around phrases to match each word individually: <em>&ldquo;<span class="term1">'. variable_get('annihilatesmurfs_term1', 'blue') .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', 'smurf') .'</span>&rdquo;</em> will match less than <em><span class="term1">'. variable_get('annihilatesmurfs_term1', 'blue') .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', 'smurf') .'</span></em>.</li><li>Consider loosening your query with <em>OR</em>: <em><span class="term1">'. variable_get('annihilatesmurfs_term1', 'blue') .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', 'smurf') .'</span></em> will match less than <em><span class="term1">'. variable_get('annihilatesmurfs_term1', 'blue') .'</span> OR <span class="term2">'. variable_get('annihilatesmurfs_term2', 'smurf') .'</span></em>.</li></ul></div></div>',
+  );
+  
+  // include live preview script to show HTML as you type it
+  drupal_add_js(drupal_get_path('module', 'annihilatesmurfs') .'/annihilatesmurfs.js', $type = 'module', $scope = 'footer');
+
+  return system_settings_form($form);
+} // function annihilatesmurfs_admin
+
+
+/**
+ * Implementation of hook_menu().
+ * 
+ * Add link to settings page
+ */
+function annihilatesmurfs_menu() {
+
+  $items = array();
+
+  $items['admin/settings/annihilatesmurfs'] = array(
+    'title' => 'Annihilate smurfs',
+    'description' => 'Replace the "blue smurf" text with whatever you like',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('annihilatesmurfs_admin'),
+    'access arguments' => array('administer annihilatesmurfs'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+} // function annihilatesmurfs_menu
+
+
+/**
+ * Validate user input.
+ */
+function annihilatesmurfs_admin_validate($form, &$form_state) {
+  // trim spaces
+  $form_state['values']['annihilatesmurfs_term1'] = trim($form_state['values']['annihilatesmurfs_term1']);
+  $form_state['values']['annihilatesmurfs_term2'] = trim($form_state['values']['annihilatesmurfs_term2']);
+} // function annihilatesmurfs_admin_validate
+
+
+// TODO - Process user input
+// remove variables if fields are blank
+
