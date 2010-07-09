@@ -21,4 +21,4 @@ Grant the "administer annihilatesmurfs" permission to allow access to the settin
 Author
 ----------------------------------------
 Derek Ahmedzai
-derek@sharpshooter.org
+derek@proctors.co.uk
