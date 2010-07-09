@@ -17,7 +17,7 @@ function annihilatesmurfs_install() {
  * Implementation of hook_enable().
  */
 function annihilatesmurfs_enable() {
-  drupal_set_message(t("Annihilate smurfs settings are available under !link", 
+  drupal_set_message(t("Annihilate smurfs settings are available under !link",
     array( '!link' => l('Administer > Site configuration > Annihilate smurfs ',  'admin/settings/annihilatesmurfs' ) )
   ));
 }
@@ -29,6 +29,6 @@ function annihilatesmurfs_uninstall() {
   // remove persistent variables
   db_query("DELETE FROM {variable} WHERE name LIKE 'annihilatesmurfs_%%'");
   cache_clear_all('variables', 'cache');
-  
+
   drupal_set_message(t("Persistent variables have been deleted (annihilatesmurfs_%)."));
 }
