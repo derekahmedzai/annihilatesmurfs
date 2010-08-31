@@ -1,6 +1,6 @@
 ; $Id$
 name = Annihilate smurfs
-description = Replaces the "blue smurf" text with whatever you like.
+description = Allows authorised users to override the "blue smurf" text returned by the search module.
 core = 6.x
+dependencies[] = search
 package = Search
-version = 6.x-1.1

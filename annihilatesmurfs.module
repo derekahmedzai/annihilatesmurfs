@@ -3,7 +3,7 @@
 
 /**
  * @file
- * Annihilate smurfs module - replaces the "blue smurf" text with whatever you like.
+ * Annihilate smurfs module - allows authorised users to override the "blue smurf" text returned by the search module.
  */
 
 // constants
@@ -21,7 +21,6 @@ function annihilatesmurfs_help($path, $arg) {
   $output = '';
   switch ($path) {
     case "admin/help#annihilatesmurfs":
-      //$output = '<p>'.  t("Replaces the \"blue smurf\" text with whatever you like.") .'</p>';
       $output = check_markup(file_get_contents( dirname(__FILE__) ."/README.txt") );
       break;
   }
@@ -131,8 +130,4 @@ function annihilatesmurfs_admin_validate($form, &$form_state) {
   $form_state['values']['annihilatesmurfs_term1'] = trim($form_state['values']['annihilatesmurfs_term1']);
   $form_state['values']['annihilatesmurfs_term2'] = trim($form_state['values']['annihilatesmurfs_term2']);
 } // function annihilatesmurfs_admin_validate
-
-
-// TODO - Process user input
-// remove variables if fields are blank
 
