@@ -47,16 +47,28 @@ function annihilatesmurfs_perm() {
  */
 function phptemplate_box($title, $content, $region = 'main') {
   if ($title == 'Your search yielded no results') {
-    // get replacement text (if any)
-    $term1 = variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1);
-    $term2 = variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2);
-
-    // to preserve translatability, need to just replace the search terms
-    $content = preg_replace('/'. ANNIHILATE_TERM_1 .'/', $term1, $content);
-    $content = preg_replace('/'. ANNIHILATE_TERM_2 .'/', $term2, $content);
+    // update string
+	$content = annihilatesmurfs_custom_search_text($content);
   }
   $output = '<h2 class="title">'. $title .'</h2><div>'. $content .'</div>';
   return $output;
+}
+
+
+
+/**
+ * Return custom search text
+ */
+function annihilatesmurfs_custom_search_text($content) {
+  // get replacement text (if any)
+  $term1 = variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1);
+  $term2 = variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2);
+  
+  // to preserve translatability, need to just replace the search terms
+  $content = preg_replace('/'. ANNIHILATE_TERM_1 .'/', $term1, $content);
+  $content = preg_replace('/'. ANNIHILATE_TERM_2 .'/', $term2, $content);
+  
+  return $content;
 }
 
 
@@ -87,8 +99,13 @@ function annihilatesmurfs_admin() {
     '#required' => FALSE,
   );
   // add live preview placeholder - see annihilatesmurfs.js for functionality
+  $live_placeholder_text = annihilatesmurfs_custom_search_text(t('<ul>
+<li>Check if your spelling is correct.</li>
+<li>Remove quotes around phrases to match each word individually: <em>"blue smurf"</em> will match less than <em>blue smurf</em>.</li>
+<li>Consider loosening your query with <em>OR</em>: <em>blue smurf</em> will match less than <em>blue OR smurf</em>.</li>
+</ul>'));
   $form['annihilatesmurfs_live_preview'] = array(
-    '#value' => '<div id="annihilatesmurfs-live-preview"><h3>Preview</h3><div style="border:1px solid #ccc; padding:5px; margin:5px 0;"><strong>Your search yielded no results</strong><ul><li>Check if your spelling is correct.</li><li>Remove quotes around phrases to match each word individually: <em>&ldquo;<span class="term1">'. variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1) .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2) .'</span>&rdquo;</em> will match less than <em><span class="term1">'. variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1) .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2) .'</span></em>.</li><li>Consider loosening your query with <em>OR</em>: <em><span class="term1">'. variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1) .'</span> <span class="term2">'. variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2) .'</span></em> will match less than <em><span class="term1">'. variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1) .'</span> OR <span class="term2">'. variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2) .'</span></em>.</li></ul></div></div>',
+    '#value' => '<div id="annihilatesmurfs-live-preview"><h3>Preview</h3><div style="border:1px solid #ccc; padding:5px; margin:5px 0;"><strong>'. t('Your search yielded no results') .'</strong>'. $live_placeholder_text .'</div></div>',
   );
 
   // include live preview script to show HTML as you type it
