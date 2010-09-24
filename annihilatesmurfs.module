@@ -25,7 +25,7 @@ function annihilatesmurfs_help($path, $arg) {
       break;
   }
   return $output;
-} // function annihilatesmurfs_help
+}
 
 
 
@@ -35,7 +35,7 @@ function annihilatesmurfs_help($path, $arg) {
  */
 function annihilatesmurfs_perm() {
   return array('administer annihilatesmurfs');
-} // function annihilatesmurfs_perm()
+}
 
 
 
@@ -57,7 +57,7 @@ function phptemplate_box($title, $content, $region = 'main') {
   }
   $output = '<h2 class="title">'. $title .'</h2><div>'. $content .'</div>';
   return $output;
-} // function phptemplate_box
+}
 
 
 /**
@@ -66,10 +66,7 @@ function phptemplate_box($title, $content, $region = 'main') {
 function annihilatesmurfs_admin() {
 
   $form['annihilatesmurfs_intro'] = array(
-    //DEL'#value' => t('Replace the "'. ANNIHILATE_TERM_1 .' '. ANNIHILATE_TERM_2 .'" text with whatever you like.<br />'. l('Get help on the Annihilate smurfs module here', 'admin/help/annihilatesmurfs')),
     '#value' => t('Replace the "@term1 @term2" text with whatever you like.', array('@term1' => ANNIHILATE_TERM_1, '@term2' => ANNIHILATE_TERM_2)) .'<br />'.  l('Get help on the Annihilate smurfs module here', 'admin/help/annihilatesmurfs'),
-    // TODO - allow user to leave fields blank
-    //<br />Leave the fields blank to use the default text ("blue smurf").
   );
   $form['annihilatesmurfs_term1'] = array(
     '#type' => 'textfield',
@@ -98,7 +95,7 @@ function annihilatesmurfs_admin() {
   drupal_add_js(drupal_get_path('module', 'annihilatesmurfs') .'/annihilatesmurfs.js', $type = 'module', $scope = 'footer');
 
   return system_settings_form($form);
-} // function annihilatesmurfs_admin
+}
 
 
 /**
@@ -119,7 +116,7 @@ function annihilatesmurfs_menu() {
   );
 
   return $items;
-} // function annihilatesmurfs_menu
+}
 
 
 /**
@@ -129,5 +126,5 @@ function annihilatesmurfs_admin_validate($form, &$form_state) {
   // trim spaces
   $form_state['values']['annihilatesmurfs_term1'] = trim($form_state['values']['annihilatesmurfs_term1']);
   $form_state['values']['annihilatesmurfs_term2'] = trim($form_state['values']['annihilatesmurfs_term2']);
-} // function annihilatesmurfs_admin_validate
+}
 

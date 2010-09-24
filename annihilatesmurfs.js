@@ -4,15 +4,14 @@
  * @file
  * Live preview for Annihilate smurfs module
  */
-
-// initiate the live preview
-$(document).ready(function () {
-  createPreviewText ();
-  bindPreviewEvents ();
-});
+Drupal.behaviors.annihilateSmurfs = function (context) {
+  // initiate the live preview
+  annihilateSmurfsCreatePreviewText ();
+  annihilateSmurfsBindPreviewEvents ();
+};
 
 // create preview text
-function createPreviewText() {
+function annihilateSmurfsCreatePreviewText() {
   // get current values
   var term1 = $("#edit-annihilatesmurfs-term1").val();
   var term2 = $("#edit-annihilatesmurfs-term2").val();
@@ -23,15 +22,14 @@ function createPreviewText() {
 }
 
 // bind preview events
-function bindPreviewEvents() {
-  $("#edit-annihilatesmurfs-term1").bind("blur change keyup", updateTerms);
-  $("#edit-annihilatesmurfs-term2").bind("blur change keyup", updateTerms);
+function annihilateSmurfsBindPreviewEvents() {
+  $("#edit-annihilatesmurfs-term1").bind("blur change keyup", annihilateSmurfsUpdateTerms);
+  $("#edit-annihilatesmurfs-term2").bind("blur change keyup", annihilateSmurfsUpdateTerms);
 }
 
 // update preview text
-function updateTerms()
+function annihilateSmurfsUpdateTerms()
 {
   $(".term1").text($("#edit-annihilatesmurfs-term1").val());
   $(".term2").text($("#edit-annihilatesmurfs-term2").val());
 }
-
