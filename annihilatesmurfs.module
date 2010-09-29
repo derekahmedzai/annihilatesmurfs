@@ -61,8 +61,8 @@ function phptemplate_box($title, $content, $region = 'main') {
  */
 function annihilatesmurfs_custom_search_text($content) {
   // get replacement text (if any)
-  $term1 = variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1);
-  $term2 = variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2);
+  $term1 = check_plain(variable_get('annihilatesmurfs_term1', ANNIHILATE_TERM_1));
+  $term2 = check_plain(variable_get('annihilatesmurfs_term2', ANNIHILATE_TERM_2));
   
   // to preserve translatability, need to just replace the search terms
   $content = preg_replace('/'. ANNIHILATE_TERM_1 .'/', $term1, $content);
